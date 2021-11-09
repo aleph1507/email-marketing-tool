@@ -1,0 +1,21 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+table.inner-horizontal-border tr {
+    border-bottom: 1px solid black;
+}
+
+table.inner-horizontal-border thead {
+    border-bottom: 2px solid black;
+}
+
+table.inner-vertical-padding th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+table.inner-vertical-padding td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
