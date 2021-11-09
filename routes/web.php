@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
+use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,5 +45,14 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('{customerGroup}/edit', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit');
         Route::patch('{customerGroup}', [CustomerGroupController::class, 'update'])->name('customer-groups.update');
         Route::delete('{customerGroup}', [CustomerGroupController::class, 'destroy'])->name('customer-groups.delete');
+    });
+
+    Route::prefix('templates')->group(function() {
+        Route::get('', [TemplateController::class, 'index'] )->name('templates.index');
+        Route::get('create', [TemplateController::class, 'create'] )->name('templates.create');
+        Route::post('', [TemplateController::class, 'store'])->name('templates.store');
+        Route::get('{template}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
+        Route::patch('{template}', [TemplateController::class, 'update'])->name('templates.update');
+        Route::delete('{template}', [TemplateController::class, 'destroy'])->name('templates.delete');
     });
 });

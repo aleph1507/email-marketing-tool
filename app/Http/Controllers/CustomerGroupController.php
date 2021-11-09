@@ -100,10 +100,11 @@ class CustomerGroupController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\CustomerGroup  $customerGroup
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(CustomerGroup $customerGroup)
     {
-        //
+        $customerGroup->delete();
+        return redirect()->route('customer-groups.index')->with('success', 'Customer group deleted');
     }
 }
