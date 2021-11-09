@@ -64,5 +64,6 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
         Route::patch('{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
         Route::delete('{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.delete');
+        Route::post('{campaign}/mail', [CampaignController::class, 'mail'])->name('campaigns.mail');
     });
 });

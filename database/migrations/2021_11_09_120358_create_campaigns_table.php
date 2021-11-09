@@ -19,6 +19,8 @@ class CreateCampaignsTable extends Migration
             $table->dateTime('send_at')->nullable();
             $table->boolean('sent')->default(false);
 
+            $table->boolean('scheduled')->default(false);
+
             $table->bigInteger('template_id')->unsigned();
             $table->foreign('template_id')
                 ->references('id')

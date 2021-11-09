@@ -26,6 +26,7 @@
                                     <th>Send Status</th>
                                     <th>Template</th>
                                     <th>Group</th>
+                                    <th>Mail</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </thead>
@@ -43,6 +44,14 @@
                                                 <a href="{{route('customer-groups.edit', $campaign->customerGroup->id)}}">
                                                     <i class="fas fa-edit fa-2x"></i>
                                                 </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <form action="{{route('campaigns.mail', $campaign->id)}}" method="post">
+                                                    @csrf
+                                                    <button type="submit">
+                                                        <i class="far fa-envelope fa-2x"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                             <td class="text-center">
                                                 <a href="{{route('campaigns.edit', $campaign->id)}}">

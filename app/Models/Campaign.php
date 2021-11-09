@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Date;
 
 class Campaign extends Model
 {
@@ -23,5 +26,17 @@ class Campaign extends Model
 
     public function customerGroup() {
         return $this->belongsTo(CustomerGroup::class);
+    }
+
+    public function scopeUnscheduled($query) {
+        return $query->where('scheduled', false);
+    }
+
+    public function scopeUnsent($query) {
+        return $query->where('sent', false);
+    }
+
+    public function scopeFuture($query) {
+        return $query->where(new DateTime('send_at'), '>', now());
     }
 }
