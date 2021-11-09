@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\TemplateController;
@@ -54,5 +55,14 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('{template}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
         Route::patch('{template}', [TemplateController::class, 'update'])->name('templates.update');
         Route::delete('{template}', [TemplateController::class, 'destroy'])->name('templates.delete');
+    });
+
+    Route::prefix('campaigns')->group(function() {
+        Route::get('', [CampaignController::class, 'index'] )->name('campaigns.index');
+        Route::get('create', [CampaignController::class, 'create'] )->name('campaigns.create');
+        Route::post('', [CampaignController::class, 'store'])->name('campaigns.store');
+        Route::get('{campaign}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
+        Route::patch('{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
+        Route::delete('{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.delete');
     });
 });

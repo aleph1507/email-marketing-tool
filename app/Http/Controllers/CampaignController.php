@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\CustomerGroup;
+use App\Models\Template;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
@@ -14,7 +17,9 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        //
+        return response()->view('campaigns/index', [
+            'campaigns' => Campaign::paginate(10)
+        ]);
     }
 
     /**
@@ -24,18 +29,37 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        //
+        return response()->view('campaigns/create', [
+            'templates' => Template::all(),
+            'customerGroups' => CustomerGroup::all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'date' => 'required|date',
+            'hour' => 'required|between:0,24',
+            'minute' => 'required|between:0,60',
+            'template_id' => 'required|exists:templates,id',
+            'customer_group_id' => 'required|exists:customer_groups,id'
+        ]);
+
+        $validated['sent'] = $request->has('sent');
+
+        $validated['send_at'] = Carbon::createFromFormat('Y-m-d H:i:s',
+            $request->date . ' ' . $validated['hour'] . ':' . $validated['minute'] . ':00');
+
+        $campaign = Campaign::create($validated);
+
+        return redirect()->route('campaigns.index')->with('success', 'Campaign stored')->with(['campaign' => $campaign]);
     }
 
     /**
@@ -57,7 +81,18 @@ class CampaignController extends Controller
      */
     public function edit(Campaign $campaign)
     {
-        //
+        $dt = Carbon::create($campaign->send_at);
+        $date = $dt->format('Y-m-d');
+        $hour = $dt->hour;
+        $minute = $dt->minute;
+        return response()->view('campaigns/create', [
+            'campaignDate' => $date,
+            'campaignHour' => $hour,
+            'campaignMinute' => $minute,
+            'campaign' => $campaign,
+            'templates' => Template::all(),
+            'customerGroups' => CustomerGroup::all()
+        ]);
     }
 
     /**
@@ -65,21 +100,37 @@ class CampaignController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Campaign $campaign)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'date' => 'required|date',
+            'hour' => 'required|between:0,24',
+            'minute' => 'required|between:0,60',
+            'template_id' => 'required|exists:templates,id',
+            'customer_group_id' => 'required|exists:customer_groups,id'
+        ]);
+
+        $validated['sent'] = $request->has('sent');
+
+        $validated['send_at'] = Carbon::createFromFormat('Y-m-d H:i:s',
+            $request->date . ' ' . $validated['hour'] . ':' . $validated['minute'] . ':00');
+        $campaign->update($validated);
+
+        return redirect()->route('campaigns.index')->with('success', 'Campaign updated')->with(['campaign' => $campaign]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Campaign  $campaign
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Campaign $campaign)
     {
-        //
+        $campaign->delete();
+        return redirect()->route('campaigns.index')->with('success', 'Campaign deleted');
     }
 }

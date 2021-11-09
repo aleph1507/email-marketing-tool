@@ -13,4 +13,8 @@ class Template extends Model
         'subject',
         'body'
     ];
+
+    public function campaigns() {
+        return $this->hasMany(Campaign::class);
+    }
 }
